@@ -11,9 +11,9 @@ const Button = (props) => {
     <button onClick={props.handler} > {props.text} </button>
   )
 }
-const Count = (props) => {
+const StatisticLine = (props) => {
   return (
-    <p>{props.text} {props.count} </p>
+    <p>{props.text} {props.value} </p>
   )
 }
 
@@ -26,12 +26,12 @@ const Statistics = (props) => {
     positive = props.good / props.total * 100
     return (
       <div>
-        <Count text= {"good"} count= {props.good} />
-        <Count text= {"neutral"} count= {props.neutral} />
-        <Count text= {"bad"} count= {props.bad} />
-        <Count text= {"all"} count={props.total} />
-        <p> {"average"} {average} </p>
-        <p> {"positive"} {positive} </p>
+        <StatisticLine text= "good" value= {props.good} />
+        <StatisticLine text= "neutral" value = {props.neutral} />
+        <StatisticLine text= "bad" value = {props.bad} />
+        <StatisticLine text= "all" value = {props.total} />
+        <StatisticLine text= "average" value = {average} />
+        <StatisticLine text= "positive" value = {`${positive} %`} />
       </div>
     )
   } 
