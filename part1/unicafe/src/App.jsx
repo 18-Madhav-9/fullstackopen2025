@@ -18,22 +18,25 @@ const Count = (props) => {
 }
 
 const Statistics = (props) => {
-
   let average = 0
   let positive = 0 
 
   if (props.total != 0 ) {
     average = (props.good-props.bad)/props.total
     positive = props.good / props.total * 100
-  }
+    return (
+      <div>
+        <Count text= {"good"} count= {props.good} />
+        <Count text= {"neutral"} count= {props.neutral} />
+        <Count text= {"bad"} count= {props.bad} />
+        <Count text= {"all"} count={props.total} />
+        <p> {"average"} {average} </p>
+        <p> {"positive"} {positive} </p>
+      </div>
+    )
+  } 
+  else return <div>No feedback given</div>
 
-  return (
-    <div>
-      <p> {"average"} {average} </p>
-      <p> {"positive"} {positive} </p>
-    </div>
-
-  )
 }
 
 const App = (props) => {
@@ -65,12 +68,7 @@ const App = (props) => {
       <Button handler = {handleBad} text= {"bad"} />
       
       <Display text = {"statistics"} />
-      <Count text= {"good"} count= {good} />
-      <Count text= {"neutral"} count= {neutral} />
-      <Count text= {"bad"} count= {bad} />
-      <Count text= {"all"} count={total} />
-
-      <Statistics good = {good} bad ={bad} total = {total} />
+      <Statistics good = {good} bad ={bad} neutral={neutral} total = {total} />
 
     </div>
   )
