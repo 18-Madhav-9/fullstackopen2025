@@ -12,10 +12,31 @@ const Button = (props) => {
   )
 }
 
-const Stat = (props) => {
+const Count = (props) => {
   return (
     <p>{props.text} {props.count} </p>
   )
+}
+
+const Average = (props) => { 
+  let average = 0
+  if (props.total != 0 ) {
+    average = (props.good-props.bad)/props.total
+  }  
+  return (
+    <p>{"average"} {average} </p>
+  )
+}
+
+const Positive = (props) => {
+  let positive = 0 
+  if ( props.total != 0 ) {
+    positive = props.good / props.total * 100
+  }
+  return (
+    <p>{"positive"} {positive}</p>
+  )
+
 }
 
 const App = (props) => {
@@ -23,24 +44,37 @@ const App = (props) => {
   const [good,setGood] = useState(0) 
   const [neutral , setNeutral] = useState(0)
   const [bad , setBad ] = useState(0)
+  const total = good+bad+neutral 
 
-  const handleGood = ()=> {setGood(good+1)}
-  const handleNeutral = () => {setNeutral(neutral+1)}
-  const handleBad = () => {setBad(bad+1)}
-
+  const handleGood = ()=> {
+    const newGood = good+1 
+    setGood(newGood)
+  }
+  const handleNeutral = () => {
+    const newNeutral = neutral+1 
+    setNeutral(newNeutral)
+  }
+  const handleBad = () => {
+    const newBad = bad+1
+    setBad(newBad)
+  }
 
   return (
     <div>
       <Display text = {"give feedback"} />
       
-      <Button handler = {handleGood} text = {"Good"} />
-      <Button handler = {handleNeutral} text = {"Neutral"} />
-      <Button handler = {handleBad} text= {"Bad"} />
+      <Button handler = {handleGood} text = {"good"} />
+      <Button handler = {handleNeutral} text = {"neutral"} />
+      <Button handler = {handleBad} text= {"bad"} />
       
       <Display text = {"statistics"} />
-      <Stat text= {"Good"} count= {good} />
-      <Stat text= {"Neutral"} count= {neutral} />
-      <Stat text= {"Bad"} count= {bad} />
+      <Count text= {"good"} count= {good} />
+      <Count text= {"neutral"} count= {neutral} />
+      <Count text= {"bad"} count= {bad} />
+      <Count text= {"all"} count={total} />
+
+      <Average good={good} neutral = {neutral} bad = {bad} total = {total} />
+      <Positive good = {good} total = {total} />
 
     </div>
   )
