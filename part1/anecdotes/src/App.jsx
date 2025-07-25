@@ -5,6 +5,11 @@ const Button = (props) => {
     <button onClick={props.handler} > {props.text} </button>
   )
 }
+const Display = (props) => {
+  return ( 
+    <h1>{props.text}</h1>
+  )
+}
 
 
 const App = () => {
@@ -20,6 +25,8 @@ const App = () => {
   ]
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
+  const max = Math.max(...votes)
+  const anecdote = votes.indexOf(max)
 
   let random = Math.floor(Math.random()*anecdotes.length )
 
@@ -35,10 +42,17 @@ const App = () => {
 
   return (
     <div>
+      <Display text = "Anecdote of the day" />
+
       <p>{ anecdotes[selected]} </p>
       <p> has {votes[selected]} votes </p>
+
       <Button text = {"votes"} handler = {handleVote} />
       <Button text = {"next anecdote"} handler = {handleSelected} />
+
+      <Display text = "Anecdote with most votes" />
+      <p> {anecdotes[anecdote]} </p>
+
     </div>
   )
 }
