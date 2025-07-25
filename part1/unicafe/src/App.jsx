@@ -30,12 +30,14 @@ const Statistics = (props) => {
     return (
       <div>
         <table>
-          <StatisticLine text= "good" value= {props.good} />
-          <StatisticLine text= "neutral" value = {props.neutral} />
-          <StatisticLine text= "bad" value = {props.bad} />
-          <StatisticLine text= "all" value = {props.total} />
-          <StatisticLine text= "average" value = {average.toFixed(1)} />
-          <StatisticLine text= "positive" value = {`${positive.toFixed(1)} %`} />
+          <tbody>
+            <StatisticLine text= "good" value= {props.good} />
+            <StatisticLine text= "neutral" value = {props.neutral} />
+            <StatisticLine text= "bad" value = {props.bad} />
+            <StatisticLine text= "all" value = {props.total} />
+            <StatisticLine text= "average" value = {average.toFixed(1)} />
+            <StatisticLine text= "positive" value = {`${positive.toFixed(1)} %`} />
+          </tbody>
         </table>
       </div>
     )
