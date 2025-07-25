@@ -11,32 +11,29 @@ const Button = (props) => {
     <button onClick={props.handler} > {props.text} </button>
   )
 }
-
 const Count = (props) => {
   return (
     <p>{props.text} {props.count} </p>
   )
 }
 
-const Average = (props) => { 
+const Statistics = (props) => {
+
   let average = 0
+  let positive = 0 
+
   if (props.total != 0 ) {
     average = (props.good-props.bad)/props.total
-  }  
-  return (
-    <p>{"average"} {average} </p>
-  )
-}
-
-const Positive = (props) => {
-  let positive = 0 
-  if ( props.total != 0 ) {
     positive = props.good / props.total * 100
   }
-  return (
-    <p>{"positive"} {positive}</p>
-  )
 
+  return (
+    <div>
+      <p> {"average"} {average} </p>
+      <p> {"positive"} {positive} </p>
+    </div>
+
+  )
 }
 
 const App = (props) => {
@@ -73,8 +70,7 @@ const App = (props) => {
       <Count text= {"bad"} count= {bad} />
       <Count text= {"all"} count={total} />
 
-      <Average good={good} neutral = {neutral} bad = {bad} total = {total} />
-      <Positive good = {good} total = {total} />
+      <Statistics good = {good} bad ={bad} total = {total} />
 
     </div>
   )
