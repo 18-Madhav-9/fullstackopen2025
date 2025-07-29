@@ -4,6 +4,7 @@ const Header = ({header}) => {
     )
 }
 
+
 const CourseDetail = ({course}) => {
     return (
         <div> 
@@ -13,6 +14,7 @@ const CourseDetail = ({course}) => {
         </div>
     )
 }
+
 
 const Part = ({part}) => {
     return (
@@ -26,6 +28,7 @@ const Total = ({parts}) => {
     )
 }
 
+
 const Course = ({courses} ) => {
     return (
         <div>
@@ -33,5 +36,6 @@ const Course = ({courses} ) => {
             { courses.map( (course) => <CourseDetail key={course.id} course={course} /> ) }
         </div>
     )
-} 
+}
+
 export default Course 
