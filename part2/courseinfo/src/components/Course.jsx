@@ -4,11 +4,19 @@ const Header = ({header}) => {
     )
 }
 
+const CourseDetail = ({course}) => {
+    return (
+        <div> 
+            <h2>{course.name}</h2>
+            { course.parts.map( (element) => <Part key={element.id} part={element} /> ) }
+            <Total  parts={course.parts} />
+        </div>
+    )
+}
+
 const Part = ({part}) => {
     return (
-        <li>
-            {part.name} {part.exercises}
-        </li>
+        <p>{part.name} {part.exercises}</p>
     )
 }
 const Total = ({parts}) => {
@@ -18,12 +26,11 @@ const Total = ({parts}) => {
     )
 }
 
-const Course = ({course} ) => {
+const Course = ({courses} ) => {
     return (
         <div>
-            <Header header={course.name} />
-            { course.parts.map ( (element) => < Part key = {element.id} part={element} />  ) }
-            <Total parts={course.parts} />
+            <Header header = "Web development curriculum" />
+            { courses.map( (course) => <CourseDetail key={course.id} course={course} /> ) }
         </div>
     )
 } 
