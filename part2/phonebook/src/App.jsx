@@ -62,13 +62,21 @@ const App = () => {
 
   const addperson = (event) => {
     event.preventDefault()
+    const storePerson = (personObject) => {
+      axios.post('http://localhost:3001/persons',personObject)
+      .then( (response) => {
+        console.log("stored",response.data)
+        setPersons(persons.concat(response.data))
+      })
+    }
+     
     const newperson = { 
       name:newName , 
       number:newNumber ,
-      id:persons.length >0 ? Math.max(...persons.map( current => current.id ))+1:1
+      id:(persons.length >0 ? Math.max(...persons.map( current => current.id ))+1:1 ).toString()
     }
     const found = persons.some( person => person.name.toLowerCase() === newName.toLowerCase() );
-    found ? alert(`${newName} is already added to phonebook`) : setPersons(persons.concat(newperson) )
+    found ? alert(`${newName} is already added to phonebook`) : storePerson(newperson)
     setNewName('')
     setNumber('')
   }
