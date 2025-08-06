@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import phoneServices from './services/phoneServices'
 
 const ShowDetail = ({person}) =>{
   return (
@@ -50,23 +50,18 @@ const App = () => {
   const [newNumber, setNumber] = useState('')
   const [filter ,setfilter] = useState('')
 
-
-  const getPersons = () => {
-    axios.get('http://localhost:3001/persons').then( (respone) => {
-      const data = respone.data 
-      setPersons(data)
-    })
+  const fetchPersons = () => {
+    phoneServices.getPersons()
+    .then( response => setPersons(response))
   }
-
-  useEffect(getPersons,[])
+  useEffect(fetchPersons,[])
 
   const addperson = (event) => {
     event.preventDefault()
     const storePerson = (personObject) => {
-      axios.post('http://localhost:3001/persons',personObject)
-      .then( (response) => {
-        console.log("stored",response.data)
-        setPersons(persons.concat(response.data))
+      phoneServices.createPerson(personObject)
+        .then( (response) => {
+        setPersons(persons.concat(response))
       })
     }
      
