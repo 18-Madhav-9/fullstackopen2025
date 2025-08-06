@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import phoneServices from './services/phoneServices'
 
-const ShowDetail = ({person}) =>{
+const ShowDetail = ({person,deletePerson}) =>{
   return (
     <div>
-      {person.name} {person.number}
+      {person.name} {person.number} <button onClick={ () => deletePerson(person)} >delete</button>
     </div>
   )
 }
@@ -17,10 +17,10 @@ const Filter = ({filter , filterChange}) => {
   )
 }
 
-const Persons = ({personToShow}) => {
+const Persons = ({personToShow,deletehandler}) => {
   return (
     <div>
-      { personToShow.map(person => <ShowDetail key={person.id} person={person} />)}
+      { personToShow.map(person => <ShowDetail key={person.id} person={person} deletePerson={deletehandler} />)}
     </div>
   )
 }
@@ -88,6 +88,19 @@ const App = () => {
     setfilter(event.target.value)
   }
 
+  const handleDeletePerson = (person)=> {
+    if ( window.confirm(`Delete ${person.name}?`) ){
+      phoneServices.deletePerson(person.id)
+        .then( () => { 
+          setPersons(persons.filter( p => p.id !== person.id ) ) 
+        })
+        .catch( error => {
+          alert(`${person.name} was already removed from the server`)
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
+    }
+  }
+
   const personToShow = filter === ''? persons: persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()));
 
   return (
@@ -97,7 +110,7 @@ const App = () => {
       <h3>add a new</h3>
       <PersonForm  addperson={addperson} newName={newName} nameChange={nameChange} newNumber={newNumber} numberChange={numberChange}  />
       <h3>Numbers</h3>
-      <Persons personToShow={personToShow} />
+      <Persons personToShow={personToShow} deletehandler={handleDeletePerson} />
     </div>
   )
 }
