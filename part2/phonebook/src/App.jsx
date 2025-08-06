@@ -56,22 +56,36 @@ const App = () => {
   }
   useEffect(fetchPersons,[])
 
-  const addperson = (event) => {
-    event.preventDefault()
-    const storePerson = (personObject) => {
+  const storePerson = (personObject) => {
       phoneServices.createPerson(personObject)
         .then( (response) => {
         setPersons(persons.concat(response))
       })
+  }
+
+  const replaceNumber = (newperson) => {
+    if ( window.confirm(`${newperson.name} is already added to phonebook,replace the old number with newone`)) {
+      phoneServices.replacePersonNumber(newperson.id,newperson)
+        .then( (response) => {
+          setPersons( persons.map( p => p.id !== response.id ? p : response ))
+        })
+        .catch( (error) => {
+          alert(`${newperson.name} is already deleted`)
+          setPersons( persons.filter( p => p.id !== newperson.id ) )
+        })
     }
-     
+  }
+
+  const addperson = (event) => {
+    event.preventDefault()
     const newperson = { 
-      name:newName , 
-      number:newNumber ,
-      id:(persons.length >0 ? Math.max(...persons.map( current => current.id ))+1:1 ).toString()
+      name:newName.trim() , 
+      number:newNumber.trim()
     }
-    const found = persons.some( person => person.name.toLowerCase() === newName.toLowerCase() );
-    found ? alert(`${newName} is already added to phonebook`) : storePerson(newperson)
+    const existing = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
+    
+    existing ? replaceNumber({...newperson, id: existing.id }) : storePerson(newperson)
+
     setNewName('')
     setNumber('')
   }
