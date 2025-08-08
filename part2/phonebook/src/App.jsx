@@ -1,6 +1,17 @@
 import { useEffect, useState } from 'react'
 import phoneServices from './services/phoneServices'
 
+const Notification = ({message}) => {
+  if ( message === null ) {
+    return null 
+  }
+  else {
+    return (
+      <div className='message'>{message}</div>
+    )
+  }
+}
+
 const ShowDetail = ({person,deletePerson}) =>{
   return (
     <div>
@@ -49,6 +60,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNumber] = useState('')
   const [filter ,setfilter] = useState('')
+  const [message,setMessage] = useState(null)
 
   const fetchPersons = () => {
     phoneServices.getPersons()
@@ -61,6 +73,8 @@ const App = () => {
         .then( (response) => {
         setPersons(persons.concat(response))
       })
+      setMessage(`${personObject.name} is Successfully added to server`)
+      setTimeout(() => {setMessage(null)}, 5000);
   }
 
   const replaceNumber = (newperson) => {
@@ -68,6 +82,8 @@ const App = () => {
       phoneServices.replacePersonNumber(newperson.id,newperson)
         .then( (response) => {
           setPersons( persons.map( p => p.id !== response.id ? p : response ))
+          setMessage(`Replaced ${response.name} Number`)
+          setTimeout(() => {setMessage(null)}, 5000);
         })
         .catch( (error) => {
           alert(`${newperson.name} is already deleted`)
@@ -107,6 +123,8 @@ const App = () => {
       phoneServices.deletePerson(person.id)
         .then( () => { 
           setPersons(persons.filter( p => p.id !== person.id ) ) 
+          setMessage(`Deleted ${person.name}`)
+          setTimeout(() => {setMessage(null)}, 5000);
         })
         .catch( error => {
           alert(`${person.name} was already removed from the server`)
@@ -120,6 +138,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter filter={filter} filterChange={filterChange} />
       <h3>add a new</h3>
       <PersonForm  addperson={addperson} newName={newName} nameChange={nameChange} newNumber={newNumber} numberChange={numberChange}  />
