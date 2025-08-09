@@ -17,24 +17,35 @@ const Show = ({object}) => {
 } 
 
 const List = ({filter}) => {
+  const [ show ,setShow ] = useState({})
+
+  const handleShow = (country) => {
+    setShow({...show,[country.cca3] : !show[country.cca3]})
+  }
   
-  if ( filter.length <= 0 ) return null
+  if ( filter.length === 0 ) return null
   else if ( filter.length > 10 ) {
     return (
       <div>Too many matches,specify other filter</div>
     )
   }
-  else if ( filter.length == 1 ) {
-    return ( 
-      <div>
-        <Show object={filter[0]} /> 
-      </div>
-    )
+  else if ( filter.length === 1 ) {
+    return <Show object={filter[0]} />
   }
-  else {
+  else if ( filter.length < 10 ) { 
     return (
       <div>
-        {filter.map( object => <p key = {object.cca3} >{object.name.common}</p> )}
+        {filter.map( object => (
+          <div key = {object.cca3} >
+            <p>
+              {object.name.common}
+              <button onClick={() => {handleShow(object) } } >
+                {show[object.cca3] ? 'Hide':'Show' } 
+              </button>
+            </p>
+            {show[object.cca3] && <Show object={object} />}
+          </div> 
+        ))}
       </div>
     )
   }
