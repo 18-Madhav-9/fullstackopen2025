@@ -1,9 +1,9 @@
+const path = require('path')
 const express = require('express')
 const morgan = require('morgan')
-const cors = require('cors')
 const app = express()
 
-app.use(cors()) 
+app.use(express.static('dist'))
 app.use(express.json())
 
 morgan.token('body', (req) => {
@@ -37,9 +37,6 @@ let persons = [
   }
 ]
 
-app.get('/',(request,response) => {
-  response.json("OK")
-})
 
 app.get('/api/persons', (request, response) => {
   response.json(persons)
@@ -98,6 +95,10 @@ app.post('/api/persons', (request, response) => {
 
   persons = persons.concat(person)
   response.json(person)
+})
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'))
 })
 
 const PORT = process.env.PORT || 3001  
