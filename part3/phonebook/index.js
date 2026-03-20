@@ -59,22 +59,12 @@ app.post('/api/persons', (request, response) => {
       error: 'name or number missing' 
     })
   }
+  const phonebook = new PhoneBook({
+    name:body.name,
+    number:body.number,
+  })
+  phonebook.save().then( person => {response.json(person)} )
 
-  const names = persons.map(p => p.name)
-  if (names.includes(body.name)) {
-    return response.status(400).json({ 
-      error: 'name must be unique' 
-    })
-  }
-
-  const person = {
-    id: generateId(),
-    name: body.name,
-    number: body.number
-  }
-
-  persons = persons.concat(person)
-  response.json(person)
 })
 
 app.use((req, res) => {
