@@ -22,26 +22,29 @@ app.get('/api/persons', (request, response) => {
   })
 })
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
   const currentDate = new Date()
-  response.send(`
-    <p>Phonebook has info for ${persons.length} people</p>
-    <p>${currentDate}</p>
-  `)
+  PhoneBook.countDocuments({})
+    .then(count => {
+      response.send(`
+        <p>Phonebook has info for ${count} people</p>
+        <p>${currentDate}</p>
+      `)
+    })
+    .catch(error => next(error))
 })
 
-app.get('/api/persons/:id', (request, response) => {
-  const id = request.params.id
-  const person = persons.find(p => p.id == id)
-
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
+app.get('/api/persons/:id', (request, response,next) => {
+  PhoneBook.findById(request.params.id)
+    .then(person =>{
+      if (!person) {
+        return response.status(404).json({error:'person not found'})
+      }
+      response.json(person)
+    }).catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response,next) => {
   PhoneBook.findByIdAndDelete(request.params.id)
     .then(result => {
       if (!result) {
@@ -53,21 +56,33 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response,next) => {
   const body = request.body 
 
   if (!body.name || !body.number) {
-    return response.status(400).json({ 
-      error: 'name or number missing' 
-    })
+    return response.status(400).json({ error: 'name or number missing' })
   }
   const phonebook = new PhoneBook({
     name:body.name,
     number:body.number,
   })
   phonebook.save().then( person => {response.json(person)} )
-
+    .catch(error => next(error))
 })
+
+app.put('/api/persons/:id', (request, response, next) => {
+  PhoneBook.findById(request.params.id)
+    .then(person => {
+      if (!person) {
+        return response.status(404).json({ error: "person not found" });
+      }
+      person.number = request.body.number;
+      return person.save().then(updated =>
+        response.json(updated)
+      );
+    })
+    .catch(error => next(error));
+});
 
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'))
