@@ -13,7 +13,7 @@ const createPerson = (personObject) => {
 }
 
 const deletePerson = (id) => {
-    const request = axios.delete(`${baseUrl}/${id}`)
+    const request = axios.delete(`${baseUrl}${id}`)
     return request
 }
 

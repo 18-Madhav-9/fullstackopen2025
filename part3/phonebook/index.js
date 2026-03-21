@@ -42,9 +42,21 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = request.params.id
-  persons = persons.filter(p => p.id != id)
-  response.status(204).end()
+  PhoneBook.findByIdAndDelete(request.params.id)
+    .then(result => {
+      if (!result) {
+        return response.status(404).json({ error: 'person not found' })
+      }
+
+      response.status(204).end()
+    })
+    .catch(error => {
+      if (error.name === 'CastError') {
+        return response.status(400).json({ error: 'malformatted id' })
+      }
+
+      response.status(500).json({ error: 'internal server error' })
+    })
 })
 
 
