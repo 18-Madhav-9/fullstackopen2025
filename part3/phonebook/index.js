@@ -47,16 +47,9 @@ app.delete('/api/persons/:id', (request, response) => {
       if (!result) {
         return response.status(404).json({ error: 'person not found' })
       }
-
       response.status(204).end()
     })
-    .catch(error => {
-      if (error.name === 'CastError') {
-        return response.status(400).json({ error: 'malformatted id' })
-      }
-
-      response.status(500).json({ error: 'internal server error' })
-    })
+    .catch(error => next(error))
 })
 
 
@@ -80,6 +73,16 @@ app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'))
 })
 
+
+const errorHandler = (error,request,response,next) =>{
+  console.error(error.message)
+  if  (error.name == "CastError" ) {
+    return response.status(404).send({error:'malformated id'})
+  }
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001  
 app.listen(PORT, () => {
