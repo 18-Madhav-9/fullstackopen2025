@@ -27,7 +27,13 @@ const App = () => {
         setError(false)
         setMessage(`${personObject.name} is Successfully added to server`)
         setTimeout(() => {setMessage(null)}, 5000);
-      }) 
+      })
+      .catch(error => {
+        console.log(error.response?.data?.error || error.message)
+        setError(true)
+        setMessage(error.response?.data?.error)
+        setTimeout(() => setMessage(null), 5000)
+      })
   }
 
   const replaceNumber = (newperson) => {
