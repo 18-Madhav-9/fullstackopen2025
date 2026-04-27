@@ -1,6 +1,6 @@
 # Full Stack Open
 
-This repository contains my solutions for the University of Helsinki Full Stack Open course.
+This repository contains my solutions for the University of Helsinki Full Stack Open course and Phonebokk project
 
 ## Part 3 - Phonebook Backend
 
